@@ -1,15 +1,20 @@
 import uvicorn
+import json
 from fastapi import FastAPI
+from utils.database import execute_query_json
 
 app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"project": "POKE QUEUE"}
+    query = "select * from pokequeue.MESSAGES"
+    results = await execute_query_json(query)
+    result_dict = json.loads(results)
+    return result_dict
 
 @app.get("/api/version")
 async def version():
-    return {"version": "0.0.0"}
+    return {"version": "0.1.0"}
 
 
 if __name__ == "__main__":
